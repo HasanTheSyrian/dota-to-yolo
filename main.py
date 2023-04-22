@@ -1,25 +1,3 @@
-#############
-
-# coords = [2753.0, 2385.0, 2888.0, 2385.0, 2888.0, 2502.0, 2753.0, 2502.0]
-
-# x_coords = coords[::2]  # get every other element starting from the first (x coordinates)
-# y_coords = coords[1::2]  # get every other element starting from the second (y coordinates)
-
-# x_min = min(x_coords)
-# x_max = max(x_coords)
-# y_min = min(y_coords)
-# y_max = max(y_coords)
-
-# x_final = x_max - x_min
-# y_final = y_max - y_min
-# print(f"Bounding box: ({x_final} , {y_final})")
-# print(f"Center points: ({x_final} , {y_final})")
-
-# print(f"Bounding box: ({x_min}, {y_min}), ({x_max}, {y_max})")
-
-###############
-
-
 import os
 import cv2
 from timeit import default_timer as timer
@@ -58,7 +36,7 @@ objects = {
 # filter = list()
 
 neededObjects = ["large-vehicle", "small-vehicle", "ship"]
-filter = ["beans", "toast"]
+# filter = ["beans", "toast"]
 
 
 # print(objects[1])
@@ -117,11 +95,11 @@ def main():
                     #     metaFiles += 1            
                     #     #? splice the first 2 items in the array
                     #     contents = contentsSplit[2:]
-                    #     print(f"\nFile includes metadata ({textFile})\n")
-                    #     print(f"{contents}")
+                    #     # print(f"\nFile includes metadata ({textFile})\n")
+                    #     # print(f"{contents}")
                     # else:
-                    #     print(f"\nFile does not include metadata ({textFile})\n")
-                    #     print(f"{contents}")
+                    #     # print(f"\nFile does not include metadata ({textFile})\n")
+                    #     # print(f"{contents}")
                     #     continue
 
                     # print(contentsSplitLine)
@@ -139,7 +117,7 @@ def main():
                         imageWidth, imageHeight, channels = img.shape
 
                         coordinates = [eval(i) for i in coordinates]
-
+                        # print(coordinates)
                         coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
                         coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
 
@@ -176,6 +154,6 @@ def main():
 if __name__ == "__main__":
     main()
     endTimer = timer()
-    print(f"\nNumber of files with metadata: {metaFiles}/{len(os.listdir(textDir))}")    
+    # print(f"\nNumber of files with metadata: {metaFiles}/{len(os.listdir(textDir))}")    
 
     print(f"Time to execute: {endTimer - startTimer}s")

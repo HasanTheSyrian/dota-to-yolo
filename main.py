@@ -148,7 +148,7 @@ def main():
                         print(coordinates)
 
                     # print(contentsSplitLine)
-                    # print(f"\n{coordinatesList}") 
+                    # print(f"\n{coordinatesList}")
 
                     
 

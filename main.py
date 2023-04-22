@@ -1,18 +1,3 @@
-# import os
-
-# txtDir = "./data"  # specify the path to the directory
-# imgDir = "./images"
-
-# for file in os.listdir(txtDir):
-
-#     path = os.path.join(txtDir, file)  # construct the full file path
-
-#     with open(path, "r") as f:
-#         contents = f.read()    
-#         print(f)
-#         print(contents.split())  # do something with the contents (in this case, just print them)
-    
-
 #############
 
 # coords = [2753.0, 2385.0, 2888.0, 2385.0, 2888.0, 2502.0, 2753.0, 2502.0]
@@ -143,28 +128,40 @@ def main():
                     for i in range(len(contentsSplitLine)):
                         contentsSplitLine[i] = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
                         coordinatesList = contentsSplitLine
+                    
+                    # print(coordinatesList)
 
                     for coordinates in coordinatesList:
-                        print(coordinates)
 
-                    # print(contentsSplitLine)
-                    # print(f"\n{coordinatesList}")
+                        #? Load the image from the file
+                        img = cv2.imread(imagePath)                        
+                        #? Get the height and width of the image
+                        imageWidth, imageHeight, channels = img.shape
 
-                    
+                        coordinates = [eval(i) for i in coordinates]
 
-                
-                #? output
-                # print(contents)
+                        coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
+                        coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
 
-                    
+                        minX = min(coordsX)
+                        maxX = max(coordsX)
+
+                        minY = min(coordsY)
+                        maxY = max(coordsY)
+
+                        centerX = ((maxX + minX)/2) * (1/imageWidth)
+                        centerY = ((maxY + minY)/2) * (1/imageHeight)
+                        boundingWidth = (maxX - minX) * (1/imageWidth)
+                        boundingHeight = (maxY - minY) * (1/imageHeight)
+
+
+                        print(f"{centerX}, {centerY}, {boundingWidth}, {boundingHeight}")
+
+                        # print(f"Bounding box: ({boundingWidth} , {boundingHeight})")
+                        # print(f"Center points: ({boundingWidth} , {boundingHeight})")                    
                             
-                # Load the image from the file
-                # img = cv2.imread(imagePath)
-                
-                # Get the height and width of the image
-                # height, width, channels = img.shape
-
-                # print(f"\nImage resolution: {width}x{height}\n")
+ 
+                    print(f"\nImage resolution: {imageWidth}x{imageHeight}\n")
             else:
                 continue
             

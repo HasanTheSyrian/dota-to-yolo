@@ -52,6 +52,8 @@ def main():
             if imageFile[:-4] == textFile[:-4]:
                 imagePath = os.path.join(imageDir, imageFile)
                 textPath = os.path.join(textDir, textFile)
+                #? Load the image from the file
+                img = cv2.imread(imagePath) 
 
                 #! Process the files: 
 
@@ -59,7 +61,8 @@ def main():
                 with open(textPath, "r") as f:
                     contents = f.read()
                     contentsSplit = contents.split()
-                    contentsSplitLine = contents.split("\n")
+                    # contentsSplitLine = contents.split("\n")
+                    contentsSplitLine = contents.splitlines()
 
                     #? filter out objects that are not wanted 
                     #! ask user if to filter ALL or ANY
@@ -111,8 +114,8 @@ def main():
 
                     for coordinates in coordinatesList:
 
-                        #? Load the image from the file
-                        img = cv2.imread(imagePath)                        
+                        # img = cv2.imread(imagePath) 
+                        
                         #? Get the height and width of the image
                         imageWidth, imageHeight, channels = img.shape
 

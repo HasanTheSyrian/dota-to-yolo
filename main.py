@@ -38,12 +38,16 @@ objects = {
 neededObjects = ["large-vehicle", "small-vehicle", "ship"]
 # filter = ["beans", "toast"]
 
+coordinatesList = list()
+
+
 
 # print(objects[1])
 
 #? Iterate over the files in both directories
 def main():
     global metaFiles
+    global coordinatesList
     for imageFile, textFile in zip(os.listdir(imageDir), os.listdir(textDir)):
         
         #? Check if the file extensions match
@@ -106,11 +110,27 @@ def main():
                     #     continue
 
                     # print(contentsSplitLine)
-                    for i in range(len(contentsSplitLine)):
-                        contentsSplitLine[i] = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
-                        coordinatesList = contentsSplitLine
+
+                    # print(contentsSplitLine[8])
+
+
+                    # print(f"\n{contentsSplit[1][8]}\n")
+
+
                     
-                    # print(coordinatesList)
+                    #? contentsSplitLine after the following blocks is stripped of strings and numbers are converted into integers
+                    
+                    # for i in range(len(contentsSplitLine)):
+                    #     contentsSplitLine[i] = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
+                    #     coordinatesList = contentsSplitLine  
+
+
+                    for i in range(len(contentsSplitLine)):
+                        test = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
+                        coordinatesList.append(test)       
+
+                    # print(f"\n{contentsSplitLine}\n")
+                    print(f"\n{coordinatesList}\n")
 
                     for coordinates in coordinatesList:
 
@@ -124,25 +144,56 @@ def main():
                         coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
                         coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
 
+                        # print(coordsX)
+                        # print(coordsY)
+                        print(imageWidth)
+                        print(imageHeight)
+
                         minX = min(coordsX)
                         maxX = max(coordsX)
 
                         minY = min(coordsY)
                         maxY = max(coordsY)
 
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
                         centerX = ((maxX + minX)/2) * (1/imageWidth)
                         centerY = ((maxY + minY)/2) * (1/imageHeight)
+
+                        # centerX = (((maxX + minX)/2) / imageWidth)
+                        # centerY = (((maxY + minY)/2) / imageHeight)
                         boundingWidth = (maxX - minX) * (1/imageWidth)
                         boundingHeight = (maxY - minY) * (1/imageHeight)
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
 
 
-                        print(f"{centerX}, {centerY}, {boundingWidth}, {boundingHeight}")
+
+                        # print(f"{centerX}, {centerY}, {boundingWidth}, {boundingHeight}")
+                        test = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
+                        # print(test)
+
+                        f = open(f"{textFile[:-4]}.txt", "a")
+                        f.write(test)
+                        f.close()
+
+                        # print(f"\nClass ID: {classidcandidate}\n")
 
                         # print(f"Bounding box: ({boundingWidth} , {boundingHeight})")
                         # print(f"Center points: ({boundingWidth} , {boundingHeight})")                    
                             
  
-                    print(f"\nImage resolution: {imageWidth}x{imageHeight}\n")
+                    # print(f"\nImage resolution: {imageWidth}x{imageHeight}\n")
+
+                    # for i in range(len(contentsSplitLine)):
+                        
+
+
             else:
                 continue
             

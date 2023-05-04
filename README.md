@@ -1,4 +1,4 @@
-## Dota to Yolo Format Converter
+## Dota to YOLOv7 Format Converter
 
 A format converter for the [Dota](https://captain-whu.github.io/DOTA/dataset.html) dataset.
 

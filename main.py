@@ -9,33 +9,6 @@ imageDir = "./images"
 metaFiles = int()
 coordinatesList = list()
 
-objects = {
-    "plane": 0,
-    "ship": 1,
-    # "storage-tank": 2,
-    # "baseball-diamond": 3,
-    # "tennis-court": 4,
-    # "basketball-court": 5,
-    # "ground-track-field": 6,
-    # "harbor": 7,
-    # "bridge": 8,
-    # "large-vehicle": 9,
-    # "helicopter": 10,
-    # "roundabout": 11,
-    # "soccer-ball-field": 12,
-    # "swimming-pool": 13,
-    # "container-crane": 14,
-    # "airport": 15,
-    # "helipad": 16
-}
-
-#? make user-selectable later
-# neededObjects = list()
-# filter = list()
-# filter = ["beans", "toast"]
-# neededObjects = ["large-vehicle", "small-vehicle", "ship"]
-
-
 #? iterate over the files in both directories
 def main():
     global metaFiles
@@ -55,30 +28,6 @@ def main():
                     contents = f.read()
                     contentsSplitLine = contents.splitlines()
 
-                    #? check if all of the needed objects exist
-                    # if all(obj in contents for obj in neededObjects):
-                    #     print(f"File includes all needed objects ({textPath})")
-                    # else:
-                    #     print(f"File does not include all needed objects ({textPath})")
-                    #     continue
-
-                    #? check if one or more of the needed objects exist
-                    # if any(obj in contents for obj in neededObjects):
-                    #     print(f"File includes >=1 of the needed objects ({textPath})")
-                    # else:
-                    #     print(f"File doesn't include any of the needed objects ({textPath})")
-                    #     continue
-
-                    # for obj in neededObjects:
-                    #     if obj not in contents:
-                    #         #? splice the first 2 items in the array
-                    #         # print("test")
-                    #         # contents = contents.split()[2:]
-                    #         print(textPath)
-                    # else:
-                    #     # print(textPath)
-                    #     continue
-                    
                     #? contentsSplitLine after the following blocks is stripped of strings and numbers are converted into integers
 
                     for i in range(len(contentsSplitLine)):
@@ -113,7 +62,7 @@ def main():
                         out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
                         # print(out)
 
-                        #? Make outputData clearable with a command argument later
+
                         f = open(f"./outputData/{textFile[:-4]}.txt", "a")
                         f.write(out)
                         f.close()

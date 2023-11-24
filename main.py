@@ -101,14 +101,14 @@ def main():
                         maxY = max(coordsY)
 
                         #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
-                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
+                        #! THE IMAGE RESOULTION IS CHECKED COULD ALSO BE ASPECT RATIO
                         centerX = ((maxX + minX)/2) * (1/imageWidth)
                         centerY = ((maxY + minY)/2) * (1/imageHeight)
 
                         boundingWidth = (maxX - minX) * (1/imageWidth)
                         boundingHeight = (maxY - minY) * (1/imageHeight)
                         #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
-                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
+                        #! THE IMAGE RESOULTION IS CHECKED COULD ALSO BE ASPECT RATIO
 
                         out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
                         # print(out)

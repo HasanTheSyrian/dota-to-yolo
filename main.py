@@ -4,72 +4,56 @@ from timeit import default_timer as timer
 
 startTimer = timer()
 
-# textDir = "./data"
-
 textDir = "./testData"
 imageDir = "./images"
 metaFiles = int()
+coordinatesList = list()
 
 objects = {
     "plane": 0,
     "ship": 1,
-    "storage-tank": 2,
-    "baseball-diamond": 3,
-    "tennis-court": 4,
-    "basketball-court": 5,
-    "ground-track-field": 6,
-    "harbor": 7,
-    "bridge": 8,
-    "large-vehicle": 9,
-    "helicopter": 10,
-    "roundabout": 11,
-    "soccer-ball-field": 12,
-    "swimming-pool": 13,
-    "container-crane": 14,
-    "airport": 15,
-    "helipad": 16
+    # "storage-tank": 2,
+    # "baseball-diamond": 3,
+    # "tennis-court": 4,
+    # "basketball-court": 5,
+    # "ground-track-field": 6,
+    # "harbor": 7,
+    # "bridge": 8,
+    # "large-vehicle": 9,
+    # "helicopter": 10,
+    # "roundabout": 11,
+    # "soccer-ball-field": 12,
+    # "swimming-pool": 13,
+    # "container-crane": 14,
+    # "airport": 15,
+    # "helipad": 16
 }
 
-#! Make user-selectable later
-
+#? make user-selectable later
 # neededObjects = list()
 # filter = list()
-
-neededObjects = ["large-vehicle", "small-vehicle", "ship"]
 # filter = ["beans", "toast"]
-
-coordinatesList = list()
-
+# neededObjects = ["large-vehicle", "small-vehicle", "ship"]
 
 
-# print(objects[1])
-
-#? Iterate over the files in both directories
+#? iterate over the files in both directories
 def main():
     global metaFiles
     global coordinatesList
     for imageFile, textFile in zip(os.listdir(imageDir), os.listdir(textDir)):
         
-        #? Check if the file extensions match
+        #? check if the file extensions match
         if imageFile.endswith(".png") and textFile.endswith(".txt"):
-            #? If the filenames match, process the files
+            #? if the filenames match, process the files
             if imageFile[:-4] == textFile[:-4]:
                 imagePath = os.path.join(imageDir, imageFile)
                 textPath = os.path.join(textDir, textFile)
-                #? Load the image from the file
                 img = cv2.imread(imagePath) 
 
-                #! Process the files: 
-
-                #? this loops over each file in the directory
+                #? loop over each file in the directory
                 with open(textPath, "r") as f:
                     contents = f.read()
-                    contentsSplit = contents.split()
-                    # contentsSplitLine = contents.split("\n")
                     contentsSplitLine = contents.splitlines()
-
-                    #? filter out objects that are not wanted 
-                    #! ask user if to filter ALL or ANY
 
                     #? check if all of the needed objects exist
                     # if all(obj in contents for obj in neededObjects):
@@ -94,60 +78,21 @@ def main():
                     # else:
                     #     # print(textPath)
                     #     continue
-
-                    #? remove metadata
-                    #! ask user to remove metada or not
-
-                    # if "imagesource" in contents or "gsd" in contents:
-                    #     metaFiles += 1            
-                    #     #? splice the first 2 items in the array
-                    #     contents = contentsSplit[2:]
-                    #     # print(f"\nFile includes metadata ({textFile})\n")
-                    #     # print(f"{contents}")
-                    # else:
-                    #     # print(f"\nFile does not include metadata ({textFile})\n")
-                    #     # print(f"{contents}")
-                    #     continue
-
-                    # print(contentsSplitLine)
-
-                    # print(contentsSplitLine[8])
-
-
-                    # print(f"\n{contentsSplit[1][8]}\n")
-
-
                     
                     #? contentsSplitLine after the following blocks is stripped of strings and numbers are converted into integers
-                    
-                    # for i in range(len(contentsSplitLine)):
-                    #     contentsSplitLine[i] = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
-                    #     coordinatesList = contentsSplitLine  
-
 
                     for i in range(len(contentsSplitLine)):
-                        test = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
-                        coordinatesList.append(test)       
+                        splitLine = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
+                        coordinatesList.append(splitLine)       
 
-                    # print(f"\n{contentsSplitLine}\n")
-                    print(f"\n{coordinatesList}\n")
+                    imageWidth, imageHeight, channels = img.shape
+                    print(f"{imageWidth}x{imageHeight}")
 
                     for coordinates in coordinatesList:
 
-                        # img = cv2.imread(imagePath) 
-                        
-                        #? Get the height and width of the image
-                        imageWidth, imageHeight, channels = img.shape
-
                         coordinates = [eval(i) for i in coordinates]
-                        # print(coordinates)
                         coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
                         coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
-
-                        # print(coordsX)
-                        # print(coordsY)
-                        print(imageWidth)
-                        print(imageHeight)
 
                         minX = min(coordsX)
                         maxX = max(coordsX)
@@ -155,44 +100,26 @@ def main():
                         minY = min(coordsY)
                         maxY = max(coordsY)
 
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
+                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
                         centerX = ((maxX + minX)/2) * (1/imageWidth)
                         centerY = ((maxY + minY)/2) * (1/imageHeight)
 
-                        # centerX = (((maxX + minX)/2) / imageWidth)
-                        # centerY = (((maxY + minY)/2) / imageHeight)
                         boundingWidth = (maxX - minX) * (1/imageWidth)
                         boundingHeight = (maxY - minY) * (1/imageHeight)
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
-                        #! SOME RESULTS ARE OVER 1.0, NEED TO FIX THIS
+                        #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
+                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
 
+                        out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
+                        # print(out)
 
-
-                        # print(f"{centerX}, {centerY}, {boundingWidth}, {boundingHeight}")
-                        test = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
-                        # print(test)
-
-                        f = open(f"{textFile[:-4]}.txt", "a")
-                        f.write(test)
+                        #? Make outputData clearable with a command argument later
+                        f = open(f"./outputData/{textFile[:-4]}.txt", "a")
+                        f.write(out)
                         f.close()
-
-                        # print(f"\nClass ID: {classidcandidate}\n")
 
                         # print(f"Bounding box: ({boundingWidth} , {boundingHeight})")
                         # print(f"Center points: ({boundingWidth} , {boundingHeight})")                    
-                            
- 
-                    # print(f"\nImage resolution: {imageWidth}x{imageHeight}\n")
-
-                    # for i in range(len(contentsSplitLine)):
-                        
-
 
             else:
                 continue
@@ -202,12 +129,9 @@ def main():
             filesSkipped += 1
             continue
 
-
 # print(filesSkipped)
 
 if __name__ == "__main__":
     main()
     endTimer = timer()
-    # print(f"\nNumber of files with metadata: {metaFiles}/{len(os.listdir(textDir))}")    
-
     print(f"Time to execute: {endTimer - startTimer}s")

@@ -26,7 +26,7 @@ def main():
                 #? loop over each file in the directory
                 with open(textPath, "r") as f:
                     contents = f.read()
-                    contentsSplitLine = contents.splitlines()
+                    contentsSplitLine = contents.splitlines()[2:]
 
                     #? contentsSplitLine after the following blocks is stripped of strings and numbers are converted into integers
 
@@ -34,7 +34,7 @@ def main():
                         splitLine = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
                         coordinatesList.append(splitLine)       
 
-                    imageWidth, imageHeight, channels = img.shape
+                    imageHeight, imageWidth, channels = img.shape
                     print(f"{imageWidth}x{imageHeight}")
 
                     for coordinates in coordinatesList:
@@ -48,17 +48,15 @@ def main():
 
                         minY = min(coordsY)
                         maxY = max(coordsY)
-
-                        #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
-                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
+                        
                         centerX = ((maxX + minX)/2) * (1/imageWidth)
                         centerY = ((maxY + minY)/2) * (1/imageHeight)
 
                         boundingWidth = (maxX - minX) * (1/imageWidth)
                         boundingHeight = (maxY - minY) * (1/imageHeight)
-                        #! SOME RESULTS ARE OVER 1.0, THERE IS AN ISSUE WITH HOW
-                        #! THE IMAGE RESOULTION IS CHECKED, COULD ALSO BE ASPECT RATIO
 
+                        #! There is an issue with the output data, the coordinates are not correct
+                        #! when there is more than one file in testData. For now, it works with one file.
                         out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
                         # print(out)
 
@@ -66,10 +64,6 @@ def main():
                         f = open(f"./outputData/{textFile[:-4]}.txt", "a")
                         f.write(out)
                         f.close()
-
-                        # print(f"Bounding box: ({boundingWidth} , {boundingHeight})")
-                        # print(f"Center points: ({boundingWidth} , {boundingHeight})")                    
-
             else:
                 continue
             

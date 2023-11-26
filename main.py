@@ -53,7 +53,9 @@ def main():
                 #? loop over each file in the directory
                 with open(textPath, "r") as f:
                     contents = f.read()
-                    contentsSplitLine = contents.splitlines()
+                    contentsSplitLine = contents.splitlines()[2:]
+
+                    # print(contentsSplitLine[2:])
 
                     #? check if all of the needed objects exist
                     # if all(obj in contents for obj in neededObjects):
@@ -117,10 +119,6 @@ def main():
                         f = open(f"./outputData/{textFile[:-4]}.txt", "a")
                         f.write(out)
                         f.close()
-
-                        # print(f"Bounding box: ({boundingWidth} , {boundingHeight})")
-                        # print(f"Center points: ({boundingWidth} , {boundingHeight})")                    
-
             else:
                 continue
             

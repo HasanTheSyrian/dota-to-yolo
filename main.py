@@ -4,10 +4,11 @@ from timeit import default_timer as timer
 
 startTimer = timer()
 
-textDir = "./testData"
+textDir = "./inputData"
 imageDir = "./images"
-metaFiles = int()
-coordinatesList = list()
+imagesFiles = os.listdir(imageDir)
+textFiles = os.listdir(textDir)
+# out = list()
 
 objects = {
     "plane": 0,
@@ -38,22 +39,26 @@ objects = {
 
 #? iterate over the files in both directories
 def main():
-    global metaFiles
-    global coordinatesList
-    for imageFile, textFile in zip(os.listdir(imageDir), os.listdir(textDir)):
+    for imageFile, textFile in zip(imagesFiles, textFiles):
         
         #? check if the file extensions match
         if imageFile.endswith(".png") and textFile.endswith(".txt"):
             #? if the filenames match, process the files
             if imageFile[:-4] == textFile[:-4]:
+
                 imagePath = os.path.join(imageDir, imageFile)
                 textPath = os.path.join(textDir, textFile)
                 img = cv2.imread(imagePath) 
 
-                #? loop over each file in the directory
+                coordinatesList = []
+
+
                 with open(textPath, "r") as f:
+                    
                     contents = f.read()
                     contentsSplitLine = contents.splitlines()[2:]
+
+                    # print(contents)
 
                     #? check if all of the needed objects exist
                     # if all(obj in contents for obj in neededObjects):
@@ -110,14 +115,12 @@ def main():
                         #! when there is more than one file in testData. For now, it works with one file.
                         out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
                         # print(out)
-
                         #? Make outputData clearable with a command argument later
                         f = open(f"./outputData/{textFile[:-4]}.txt", "a")
                         f.write(out)
                         f.close()
             else:
-                continue
-            
+                continue            
         else:
             # If the file extensions do not match, skip this iteration
             filesSkipped += 1

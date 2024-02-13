@@ -84,8 +84,6 @@ def main():
             # If the file extensions do not match, skip this iteration
             continue
 
-# print(filesSkipped)
-
 if __name__ == "__main__":
     main()
     endTimer = timer()

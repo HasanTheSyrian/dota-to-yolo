@@ -4,72 +4,84 @@ from timeit import default_timer as timer
 
 startTimer = timer()
 
-textDir = "./testData"
+textDir = "./inputData"
 imageDir = "./images"
-metaFiles = int()
-coordinatesList = list()
+imagesFiles = os.listdir(imageDir)
+textFiles = os.listdir(textDir)
+
+objects = {
+    "plane": 0,
+    "ship": 1,
+    # "storage-tank": 2,
+    # "baseball-diamond": 3,
+    # "tennis-court": 4,
+    # "basketball-court": 5,
+    # "ground-track-field": 6,
+    # "harbor": 7,
+    # "bridge": 8,
+    # "large-vehicle": 9,
+    # "helicopter": 10,
+    # "roundabout": 11,
+    # "soccer-ball-field": 12,
+    # "swimming-pool": 13,
+    # "container-crane": 14,
+    # "airport": 15,
+    # "helipad": 16
+}
 
 #? iterate over the files in both directories
 def main():
-    global metaFiles
-    global coordinatesList
-    for imageFile, textFile in zip(os.listdir(imageDir), os.listdir(textDir)):
+    for imageFile, textFile in zip(imagesFiles, textFiles):
         
         #? check if the file extensions match
         if imageFile.endswith(".png") and textFile.endswith(".txt"):
             #? if the filenames match, process the files
             if imageFile[:-4] == textFile[:-4]:
+
                 imagePath = os.path.join(imageDir, imageFile)
                 textPath = os.path.join(textDir, textFile)
                 img = cv2.imread(imagePath) 
 
-                #? loop over each file in the directory
-                with open(textPath, "r") as f:
-                    contents = f.read()
+                coordinatesList = []
+
+                with open(textPath, "r") as unreadText:                    
+                    contents = unreadText.read()
                     contentsSplitLine = contents.splitlines()[2:]
+                    
+                for i in range(len(contentsSplitLine)):
+                    splitLine = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
+                    coordinatesList.append(splitLine)
 
-                    #? contentsSplitLine after the following blocks is stripped of strings and numbers are converted into integers
+                imageHeight, imageWidth, _ = img.shape
+                print(f"{imageWidth}x{imageHeight}")
 
-                    for i in range(len(contentsSplitLine)):
-                        splitLine = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
-                        coordinatesList.append(splitLine)       
+                for coordinates in coordinatesList:
 
-                    imageHeight, imageWidth, channels = img.shape
-                    print(f"{imageWidth}x{imageHeight}")
+                    coordinates = [eval(i) for i in coordinates]
+                    coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
+                    coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
 
-                    for coordinates in coordinatesList:
+                    minX = min(coordsX)
+                    maxX = max(coordsX)
+                    minY = min(coordsY)
+                    maxY = max(coordsY)
+                    
+                    centerX = ((maxX + minX)/2) * (1/imageWidth)
+                    centerY = ((maxY + minY)/2) * (1/imageHeight)
 
-                        coordinates = [eval(i) for i in coordinates]
-                        coordsX = coordinates[::2]  # get every other element starting from the first (x coordinates)
-                        coordsY = coordinates[1::2]  # get every other element starting from the second (y coordinates)
+                    boundingWidth = (maxX - minX) * (1/imageWidth)
+                    boundingHeight = (maxY - minY) * (1/imageHeight)
 
-                        minX = min(coordsX)
-                        maxX = max(coordsX)
+                    out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
+                    finalFile = open(f"./outputData/{textFile[:-4]}.txt", "a")
+                    finalFile.write(out)
 
-                        minY = min(coordsY)
-                        maxY = max(coordsY)
-                        
-                        centerX = ((maxX + minX)/2) * (1/imageWidth)
-                        centerY = ((maxY + minY)/2) * (1/imageHeight)
-
-                        boundingWidth = (maxX - minX) * (1/imageWidth)
-                        boundingHeight = (maxY - minY) * (1/imageHeight)
-
-                        #! There is an issue with the output data, the coordinates are not correct
-                        #! when there is more than one file in testData. For now, it works with one file.
-                        out = (f"0 {centerX} {centerY} {boundingWidth} {boundingHeight}\n")
-                        # print(out)
-
-
-                        f = open(f"./outputData/{textFile[:-4]}.txt", "a")
-                        f.write(out)
-                        f.close()
+                finalFile.close()
+                
             else:
-                continue
-            
+                continue            
         else:
             # If the file extensions do not match, skip this iteration
-            filesSkipped += 1
             continue
 
 # print(filesSkipped)

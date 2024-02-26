@@ -6,8 +6,10 @@ startTimer = timer()
 
 textDir = "./inputData"
 imageDir = "./images"
-imagesFiles = os.listdir(imageDir)
+outDir = "./outputData"
 textFiles = os.listdir(textDir)
+imagesFiles = os.listdir(imageDir)
+outFiles = os.listdir(outDir)
 
 objects = {
     "plane": 0,
@@ -43,18 +45,30 @@ def main():
                 img = cv2.imread(imagePath) 
 
                 coordinatesList = []
+                contentsSplitLine = []
+                test = []
 
                 with open(textPath, "r") as unreadText:                    
                     contents = unreadText.read()
-                    contentsSplitLine = contents.splitlines()[2:]
+                    contentsSplitLine = contents.splitlines()
+
+                    #? the block below checks for the presence of an "object" in the
+                    #? file which isn't included in the metadata so it gets removed
+                    # contentsSplitLine = contents.splitlines()[2:] 
+                    
+                for line in contentsSplitLine:
+                    if "large-vehicle" in line or "small-vehicle" in line or "ship" in line:
+                        test.append(line)
+
+                contentsSplitLine = test
                     
                 for i in range(len(contentsSplitLine)):
                     splitLine = ' '.join(contentsSplitLine[i].rsplit(' ', 2)[:-2]).split()
                     coordinatesList.append(splitLine)
-
+             
                 imageHeight, imageWidth, _ = img.shape
-                print(f"{imageWidth}x{imageHeight}")
-
+                # print(f"{imageWidth}x{imageHeight}")
+                
                 for coordinates in coordinatesList:
 
                     coordinates = [eval(i) for i in coordinates]
@@ -77,14 +91,14 @@ def main():
                     finalFile.write(out)
 
                 finalFile.close()
-                
-            else:
-                continue            
-        else:
-            # If the file extensions do not match, skip this iteration
-            continue
 
-# print(filesSkipped)
+    for outFile in outFiles:
+        outPath = os.path.join(outDir, outFile)
+        if os.path.getsize(outPath) == 0:
+            os.remove(outPath)
+            os.remove(f"./images/{outFile[:-4]}.png")
+            
+            print(f"File {outFile} is empty and has been removed.")
 
 if __name__ == "__main__":
     main()
